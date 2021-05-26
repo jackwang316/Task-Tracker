@@ -1,10 +1,10 @@
 import java.util.GregorianCalendar;
 
 public class Task {
-    String name;
-    String notes;
-    GregorianCalendar dueDate;
-    boolean isComplete;
+    private String name;
+    private String notes;
+    private GregorianCalendar dueDate;
+    private boolean isComplete;
 
     public Task(String name, String notes, GregorianCalendar dueDate){
         this.name = name;

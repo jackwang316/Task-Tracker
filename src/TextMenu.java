@@ -37,32 +37,6 @@ public class TextMenu {
         }
     }
 
-    public void makeChoice(){
-        int selection = getInput();
-        switch (selection){
-            case 1:
-                //list all tasks
-                break;
-            case 2:
-                //Add new task
-                break;
-            case 3:
-                //Remove task
-                break;
-            case 4:
-                //Mark task as completed
-                break;
-            case 5:
-                //List overdue incomplete tasks
-                break;
-            case 6:
-                //List upcoming incomplete tasks
-                break;
-            case 7:
-                System.exit(0);
-        }
-    }
-
     public int getInput(){
         System.out.print(MENU_PROMPT);
         int input = scanner.nextInt();
