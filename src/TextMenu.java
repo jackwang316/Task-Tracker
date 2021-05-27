@@ -49,12 +49,4 @@ public class TextMenu {
         }
         return input;
     }
-
-    public static void main(String[] args){
-        TextMenu test = new TextMenu();
-        test.printMenu();
-
-        GregorianCalendar gc = new GregorianCalendar(2020, 12, 15, 14, 25);
-        System.out.println(gc.getTime());
-    }
 }
