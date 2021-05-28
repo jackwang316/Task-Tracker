@@ -26,6 +26,10 @@ public class Task {
         return this.isComplete;
     }
 
+    public GregorianCalendar getDueDate(){
+        return  this.dueDate;
+    }
+
     public String getDateFormatted(){
         return dueDate.get(Calendar.YEAR) + "-" + dueDate.get(Calendar.MONTH)
                 + "-" + dueDate.get(Calendar.DAY_OF_MONTH) + " " + dueDate.get(Calendar.HOUR)
@@ -38,7 +42,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return this.name + "\n" + this.notes + "\n"
-                + this.dueDate.getTime() + "\n" + this.isComplete + "\n";
+        return this.name + " " +  this.notes + " "
+                         + " " + getDateFormatted() + " " + this.isComplete;
     }
 }
