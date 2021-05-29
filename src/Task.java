@@ -1,7 +1,7 @@
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class Task {
+public class Task implements Comparable<Task> {
     private String name;
     private String notes;
     private GregorianCalendar dueDate;
@@ -22,7 +22,7 @@ public class Task {
         return this.notes;
     }
 
-    public boolean getComplete(){
+    public boolean isComplete(){
         return this.isComplete;
     }
 
@@ -44,5 +44,10 @@ public class Task {
     public String toString() {
         return this.name + " " +  this.notes + " "
                          + " " + getDateFormatted() + " " + this.isComplete;
+    }
+
+    @Override
+    public int compareTo(Task t) {
+        return this.getDueDate().compareTo(t.getDueDate());
     }
 }
