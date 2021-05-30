@@ -18,6 +18,31 @@ public class TaskManager {
         tasks = new ArrayList<>();
     }
 
+    public void makeSelection(int choice){
+        switch (choice){
+            case 1:
+                printTasks();
+                break;
+            case 2:
+                addTask();
+                break;
+            case 3:
+                delete();
+                break;
+            case 4:
+                markAsComplete();
+                break;
+            case 5:
+                listOverDue();
+                break;
+            case 6:
+                listUpcoming();
+                break;
+            case 7:
+                //Exit
+        }
+    }
+
     public void printTasks(){
         if(tasks.isEmpty()){
             System.out.println(EMPTY_ARRAY_MSG);
