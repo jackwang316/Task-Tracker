@@ -1,3 +1,11 @@
+import com.google.gson.Gson;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class TaskManager {
@@ -160,6 +168,23 @@ public class TaskManager {
         }
     }
 
+    private void save(){
+        try {
+            Gson gson = new Gson();
+            Writer writer = Files.newBufferedWriter(Paths.get("task.csv"));
+            gson.toJson(tasks, writer);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Cannot save to file.");
+        }
+    }
+
+    public void exit(){
+        save();
+        System.out.println("Thank you for using the system");
+    }
+
     public static void main(String[] args){
         GregorianCalendar test1 = new GregorianCalendar(2029, 04, 21);
         GregorianCalendar test2 = new GregorianCalendar(2023, 04, 21);
@@ -171,6 +196,7 @@ public class TaskManager {
         taskManager.tasks.add(t2);
         taskManager.tasks.add(t1);
         taskManager.listUpcoming();
+        taskManager.exit();
 
     }
 }
