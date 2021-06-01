@@ -9,20 +9,31 @@ import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.util.*;
 
 public class TaskManager {
-    public static final String NAME_PROMPT = "Enter the name of new task ";
-    public static final String NOTES_PROMPT = "Enter the notes of the new task: ";
-    public static final String EMPTY_NAME_PROMPT = "Name can't be empty";
-    public static final String NO_OVERDUE_TASKS = "No overdue incomplete tasks to show.";
-    public static final String NO_INCOMPLETE_TASKS = "No incomplete tasks to show.";
+    private static final String NAME_PROMPT = "Enter the name of new task: ";
+    private static final String NOTES_PROMPT = "Enter the notes of the new task: ";
+    private static final String EMPTY_NAME_PROMPT = "Name can't be empty";
+    private static final String NO_OVERDUE_TASKS = "No overdue incomplete tasks to show.";
+    private static final String NO_INCOMPLETE_TASKS = "No incomplete tasks to show.";
     private static final String EMPTY_ARRAY_MSG = "No tasks to show.";
     private static final String REMOVE_PROMPT = "Enter the task number you want to remove (0 to cancel): ";
     private static final String INVALID_VALUE_PROMPT = "Invalid selection, value out of range";
-    public static final String MARK_COMPLETE_PROMPT = "Enter the task number you want to mark as completed (0 to cancel): ";
-    public static final String NO_UPCOMING_INCOMPLETE = "No upcoming incomplete tasks to show.";
-    public ArrayList<Task> tasks;
+    private static final String MARK_COMPLETE_PROMPT = "Enter the task number you want to mark as completed (0 to cancel): ";
+    private static final String NO_UPCOMING_INCOMPLETE = "No upcoming incomplete tasks to show.";
+    public static final String YEAR_PROMPT = "Enter the year of the due date: ";
+    public static final String MONTH_PROMPT = "Enter the month of the due date (1-12): ";
+    public static final String INVALID_MONTH_PROMPT = "Error: month must be between 1 and 12";
+    public static final String DAY_PROMPT = "Enter the day of the due date (1-28/29/30/31): ";
+    public static final String NON_EXISTENT_DATE = "Error: this date does not exist.";
+    public static final String HOUR_PROMPT = "Enter the hour of the due date (0-23): ";
+    public static final String INVALID_HOUR_PROMPT = "Error: hour must be between 0 and 23";
+    public static final String MINUTE_PROMPT = "Enter the minute of the due date (0-59):";
+    public static final String INVALID_MINUTE_PROMPT = "Error: minute must be between 0 and 59";
+    private ArrayList<Task> tasks;
     private Scanner sc = new Scanner(System.in);
 
     public TaskManager(){
@@ -33,39 +44,26 @@ public class TaskManager {
     private void load(){
         Gson gson = new Gson();
         try {
+            //https://howtodoinjava.com/gson/gson-parse-json-array/
             JsonReader reader = new JsonReader(new FileReader("task.csv"));
             Type taskListType = new TypeToken<ArrayList<Task>>(){}.getType();
             tasks = gson.fromJson(reader, taskListType);
             reader.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void makeSelection(int choice){
-        switch (choice){
-            case 1:
-                printTasks();
-                break;
-            case 2:
-                addTask();
-                break;
-            case 3:
-                delete();
-                break;
-            case 4:
-                markAsComplete();
-                break;
-            case 5:
-                listOverDue();
-                break;
-            case 6:
-                listUpcoming();
-                break;
-            case 7:
-                exit();
+        switch (choice) {
+            case 1 -> printTasks();
+            case 2 -> addTask();
+            case 3 -> delete();
+            case 4 -> markAsComplete();
+            case 5 -> listOverDue();
+            case 6 -> listUpcoming();
+            case 7 -> exit();
         }
     }
 
@@ -94,11 +92,53 @@ public class TaskManager {
         while(name.isEmpty()){
             System.out.println(EMPTY_NAME_PROMPT);
             System.out.print(NAME_PROMPT);
-            sc.nextLine();
+            name = sc.nextLine();
         }
         System.out.print(NOTES_PROMPT);
-        String task = sc.nextLine();
+        String notes = sc.nextLine();
 
+        Task temp = new Task(name, notes, getDateInput());
+        tasks.add(temp);
+        System.out.println("Task " + temp.getName() + " has been added to the list of tasks.");
+    }
+
+    public GregorianCalendar getDateInput(){
+        System.out.print(YEAR_PROMPT);
+        int year = sc.nextInt();
+        System.out.print(MONTH_PROMPT);
+        int month = sc.nextInt();
+        while (month < 1 || month > 12) {
+            System.out.println(INVALID_MONTH_PROMPT);
+            System.out.print(MONTH_PROMPT);
+            month = sc.nextInt();
+        }
+        boolean isDateValid = false;
+        int day = 0;
+        while (!isDateValid) {
+            try {
+                System.out.print(DAY_PROMPT);
+                day = sc.nextInt();
+                LocalDate.of(year, month, day);
+                isDateValid = true;
+            } catch (DateTimeException e) {
+                System.out.println(NON_EXISTENT_DATE);
+            }
+        }
+        System.out.print(HOUR_PROMPT);
+        int hour = sc.nextInt();
+        while(hour < 0 || hour > 23) {
+            System.out.println(INVALID_HOUR_PROMPT);
+            System.out.print(HOUR_PROMPT);
+            hour = sc.nextInt();
+        }
+        System.out.print(MINUTE_PROMPT);
+        int minute = sc.nextInt();
+        while(minute < 0 || minute > 59) {
+            System.out.println(INVALID_MINUTE_PROMPT);
+            System.out.print(MINUTE_PROMPT);
+            minute = sc.nextInt();
+        }
+        return new GregorianCalendar(year, month, day, hour, minute);
     }
 
     public void delete(){
@@ -106,7 +146,7 @@ public class TaskManager {
         System.out.print(REMOVE_PROMPT);
         int toDelete = sc.nextInt();
         while(toDelete < 0 || toDelete > tasks.size()){
-            System.out.print(INVALID_VALUE_PROMPT);
+            System.out.println(INVALID_VALUE_PROMPT);
             System.out.print(REMOVE_PROMPT);
             toDelete = sc.nextInt();
         }
@@ -139,7 +179,7 @@ public class TaskManager {
         int toMark = sc.nextInt();
         while (toMark < 0 || toMark >tasks.size()){
             System.out.println(INVALID_VALUE_PROMPT);
-            System.out.println(MARK_COMPLETE_PROMPT);
+            System.out.print(MARK_COMPLETE_PROMPT);
             toMark = sc.nextInt();
         }
         if(toMark > 0) {
@@ -203,15 +243,16 @@ public class TaskManager {
     public void exit(){
         save();
         System.out.println("Thank you for using the system");
-        System.exit(0);
     }
 
     public static void main(String[] args){
         TextMenu menu = new TextMenu();
         TaskManager manager = new TaskManager();
-        while(true){
+        int selection = 0;
+        while(selection != 7){
             menu.printMenu();
-            manager.makeSelection(menu.getInput());
+            selection = menu.getInput();
+            manager.makeSelection(selection);
         }
     }
 }
