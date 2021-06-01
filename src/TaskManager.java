@@ -1,10 +1,13 @@
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -24,6 +27,21 @@ public class TaskManager {
 
     public TaskManager(){
         tasks = new ArrayList<>();
+        load();
+    }
+
+    private void load(){
+        Gson gson = new Gson();
+        try {
+            JsonReader reader = new JsonReader(new FileReader("task.csv"));
+            Type taskListType = new TypeToken<ArrayList<Task>>(){}.getType();
+            tasks = gson.fromJson(reader, taskListType);
+            reader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void makeSelection(int choice){
@@ -47,7 +65,7 @@ public class TaskManager {
                 listUpcoming();
                 break;
             case 7:
-                //Exit
+                exit();
         }
     }
 
@@ -63,9 +81,9 @@ public class TaskManager {
             System.out.println("Due date: " + tasks.get(i).getDateFormatted());
             System.out.print("Completed? ");
             if(tasks.get(i).isComplete()){
-                System.out.println("Yes");
+                System.out.println("Yes\n");
             } else{
-                System.out.println("No");
+                System.out.println("No\n");
             }
         }
     }
@@ -80,6 +98,7 @@ public class TaskManager {
         }
         System.out.print(NOTES_PROMPT);
         String task = sc.nextLine();
+
     }
 
     public void delete(){
@@ -92,7 +111,7 @@ public class TaskManager {
             toDelete = sc.nextInt();
         }
         if(toDelete > 0) {
-            toDelete--;
+            toDelete--;     //Selected task is stored at index i-1
             String deletedName = tasks.get(toDelete).getName();
             tasks.remove(toDelete);
             System.out.println("Task " + deletedName + " has been removed from the list of tasks");
@@ -170,6 +189,7 @@ public class TaskManager {
 
     private void save(){
         try {
+            //https://attacomsian.com/blog/gson-write-json-file
             Gson gson = new Gson();
             Writer writer = Files.newBufferedWriter(Paths.get("task.csv"));
             gson.toJson(tasks, writer);
@@ -183,20 +203,15 @@ public class TaskManager {
     public void exit(){
         save();
         System.out.println("Thank you for using the system");
+        System.exit(0);
     }
 
     public static void main(String[] args){
-        GregorianCalendar test1 = new GregorianCalendar(2029, 04, 21);
-        GregorianCalendar test2 = new GregorianCalendar(2023, 04, 21);
-
-        Task t1 = new Task("Test1", "", test1);
-        Task t2 = new Task("Test2", "", test2);
-
-        TaskManager taskManager = new TaskManager();
-        taskManager.tasks.add(t2);
-        taskManager.tasks.add(t1);
-        taskManager.listUpcoming();
-        taskManager.exit();
-
+        TextMenu menu = new TextMenu();
+        TaskManager manager = new TaskManager();
+        while(true){
+            menu.printMenu();
+            manager.makeSelection(menu.getInput());
+        }
     }
 }
