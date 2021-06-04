@@ -2,14 +2,20 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
+/**
+ * The TextMenu class represents the options menu. Data includes the title,
+ * options, and various input prompts. Supported features include displaying the menu and
+ * reading integer input from keyboard.
+ */
 public class TextMenu {
-    private final String MENU_TITLE = "Personal Reminder";
-    private final String[] OPTIONS = {"List all tasks", "Add a new task", "Remove a task",
+    public static final int NUM_PADDING = 4;
+    public final String MENU_TITLE = "Personal Reminder";
+    public final String[] OPTIONS = {"List all tasks", "Add a new task", "Remove a task",
                             "Mark a task as completed", "List overdue incomplete tasks",
                             "List upcoming incomplete tasks", "Exit"};
-    private final String MENU_PROMPT = "Choose an option by entering 1-7: ";
-    private final String INVALID_MENU_PROMPT = "Invalid selection. Enter a number between 1 and 7";
-    private Scanner scanner = new Scanner(System.in);
+    public final String MENU_PROMPT = "Choose an option by entering 1-7: ";
+    public final String INVALID_MENU_PROMPT = "Invalid selection. Enter a number between 1 and 7";
+    public Scanner scanner = new Scanner(System.in);
 
     public TextMenu(){}
 
@@ -19,7 +25,7 @@ public class TextMenu {
     }
 
     private void printTitle(){
-        for(int i = 0; i < MENU_TITLE.length() + 4; i++){
+        for(int i = 0; i < MENU_TITLE.length() + NUM_PADDING; i++){
             System.out.print("#");
         }
         System.out.println();

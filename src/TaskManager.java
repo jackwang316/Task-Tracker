@@ -13,17 +13,26 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * TaskManager provides the functionality listed in the options.
+ * The object stores input prompts and an arraylist of tasks to manage.
+ * Features include loading tasks from csv file, selecting the correct option
+ * based on input, printing all tasks in list, adding/deleting task to list, marking
+ * a task as complete, list upcoming/overdue tasks, saving to csv and exiting.
+ * Note the main method is also in this class.
+ */
+
 public class TaskManager {
-    private static final String NAME_PROMPT = "Enter the name of new task: ";
-    private static final String NOTES_PROMPT = "Enter the notes of the new task: ";
-    private static final String EMPTY_NAME_PROMPT = "Name can't be empty";
-    private static final String NO_OVERDUE_TASKS = "No overdue incomplete tasks to show.";
-    private static final String NO_INCOMPLETE_TASKS = "No incomplete tasks to show.";
-    private static final String EMPTY_ARRAY_MSG = "No tasks to show.";
-    private static final String REMOVE_PROMPT = "Enter the task number you want to remove (0 to cancel): ";
-    private static final String INVALID_VALUE_PROMPT = "Invalid selection, value out of range";
-    private static final String MARK_COMPLETE_PROMPT = "Enter the task number you want to mark as completed (0 to cancel): ";
-    private static final String NO_UPCOMING_INCOMPLETE = "No upcoming incomplete tasks to show.";
+    public static final String NAME_PROMPT = "Enter the name of new task: ";
+    public static final String NOTES_PROMPT = "Enter the notes of the new task: ";
+    public static final String EMPTY_NAME_PROMPT = "Name can't be empty";
+    public static final String NO_OVERDUE_TASKS = "No overdue incomplete tasks to show.";
+    public static final String NO_INCOMPLETE_TASKS = "No incomplete tasks to show.";
+    public static final String EMPTY_ARRAY_MSG = "No tasks to show.";
+    public static final String REMOVE_PROMPT = "Enter the task number you want to remove (0 to cancel): ";
+    public static final String INVALID_VALUE_PROMPT = "Invalid selection, value out of range";
+    public static final String MARK_COMPLETE_PROMPT = "Enter the task number you want to mark as completed (0 to cancel): ";
+    public static final String NO_UPCOMING_INCOMPLETE = "No upcoming incomplete tasks to show.";
     public static final String YEAR_PROMPT = "Enter the year of the due date: ";
     public static final String MONTH_PROMPT = "Enter the month of the due date (1-12): ";
     public static final String INVALID_MONTH_PROMPT = "Error: month must be between 1 and 12";
@@ -74,9 +83,7 @@ public class TaskManager {
         for(int i = 0; i < tasks.size(); i++){
             Collections.sort(tasks);
             System.out.println("Task #" + (i+1));
-            System.out.println("Task: " + tasks.get(i).getName());
-            System.out.println("Notes: " + tasks.get(i).getNotes());
-            System.out.println("Due date: " + tasks.get(i).getDateFormatted());
+            System.out.println(tasks.get(i));
             System.out.print("Completed? ");
             if(tasks.get(i).isComplete()){
                 System.out.println("Yes\n");
@@ -89,7 +96,7 @@ public class TaskManager {
     public void addTask(){
         System.out.print(NAME_PROMPT);
         String name = sc.nextLine();
-        while(name.isEmpty()){
+        while(name.trim().isEmpty()){
             System.out.println(EMPTY_NAME_PROMPT);
             System.out.print(NAME_PROMPT);
             name = sc.nextLine();
@@ -166,15 +173,12 @@ public class TaskManager {
             if(!temp.isComplete()){
                 hasIncomplete = true;
                 System.out.println("Task #" + (i+1));
-                System.out.println("Task: " + tasks.get(i).getName());
-                System.out.println("Notes: " + tasks.get(i).getNotes());
-                System.out.println("Due date: " + tasks.get(i).getDateFormatted() + "\n");
+                System.out.println(tasks.get(i));
             }
         }
         if(!hasIncomplete){
             System.out.println(NO_INCOMPLETE_TASKS);
         }
-
         System.out.println(MARK_COMPLETE_PROMPT);
         int toMark = sc.nextInt();
         while (toMark < 0 || toMark >tasks.size()){
@@ -198,9 +202,7 @@ public class TaskManager {
             if(current.compareTo(temp.getDueDate()) > 0 && !temp.isComplete()){
                 hasOverDue = true;
                 System.out.println("Task #" + (i+1));
-                System.out.println("Task: " + tasks.get(i).getName());
-                System.out.println("Notes: " + tasks.get(i).getNotes());
-                System.out.println("Due date: " + tasks.get(i).getDateFormatted() + "\n");
+                System.out.println(tasks.get(i));
             }
         }
         if (!hasOverDue){
@@ -216,10 +218,7 @@ public class TaskManager {
             Task temp = tasks.get(i);
             if(current.compareTo(temp.getDueDate()) < 0 && !temp.isComplete()){
                 hasUpcoming = true;
-                System.out.println("Task #" + (i+1));
-                System.out.println("Task: " + tasks.get(i).getName());
-                System.out.println("Notes: " + tasks.get(i).getNotes());
-                System.out.println("Due date: " + tasks.get(i).getDateFormatted() + "\n");
+                System.out.println(tasks.get(i));
             }
         }
         if (!hasUpcoming){

@@ -1,6 +1,13 @@
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ * Task models the information about a task that has or needs to be completed.
+ * A task includes its name, notes regarding the task, the due date, and
+ * whether or not the task has been completed. Features include retrieving the
+ * attributes of the project, formatting the date to a proper string format and
+ * formatting the entire object into one string.
+ */
 public class Task implements Comparable<Task> {
     private String name;
     private String notes;
@@ -42,8 +49,9 @@ public class Task implements Comparable<Task> {
 
     @Override
     public String toString() {
-        return this.name + " " +  this.notes + " "
-                         + " " + getDateFormatted() + " " + this.isComplete;
+        String result = "Task: " + this.getName() + "\n" + "Notes: " + getNotes() + "\n"
+                        + "Due date: " + getDateFormatted();
+        return result;
     }
 
     @Override
