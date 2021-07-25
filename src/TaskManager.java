@@ -195,11 +195,12 @@ public class TaskManager {
 
     public void listOverDue(){
         Calendar current = Calendar.getInstance();
+        current.add(Calendar.MONTH, 1);     //Month is stored 1 less than actual value.
         Collections.sort(tasks);
         boolean hasOverDue = false;
         for(int i = 0; i < tasks.size(); i++){
             Task temp = tasks.get(i);
-            if(current.compareTo(temp.getDueDate()) > 0 && !temp.isComplete()){
+            if(current.after(temp.getDueDate()) && !temp.isComplete()){
                 hasOverDue = true;
                 System.out.println("Task #" + (i+1));
                 System.out.println(tasks.get(i));
@@ -212,11 +213,12 @@ public class TaskManager {
 
     public void listUpcoming(){
         Calendar current = Calendar.getInstance();
+        current.add(Calendar.MONTH, 1);
         Collections.sort(tasks);
         boolean hasUpcoming = false;
         for(int i = 0; i < tasks.size(); i++){
             Task temp = tasks.get(i);
-            if(current.compareTo(temp.getDueDate()) < 0 && !temp.isComplete()){
+            if(current.before(temp.getDueDate()) && !temp.isComplete()){
                 hasUpcoming = true;
                 System.out.println(tasks.get(i));
             }

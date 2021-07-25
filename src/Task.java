@@ -39,7 +39,7 @@ public class Task implements Comparable<Task> {
 
     public String getDateFormatted(){
         return dueDate.get(Calendar.YEAR) + "-" + dueDate.get(Calendar.MONTH)
-                + "-" + dueDate.get(Calendar.DAY_OF_MONTH) + " " + dueDate.get(Calendar.HOUR)
+                + "-" + dueDate.get(Calendar.DAY_OF_MONTH) + " " + dueDate.get(Calendar.HOUR_OF_DAY)
                 + ":" + dueDate.get(Calendar.MINUTE);
     }
 
