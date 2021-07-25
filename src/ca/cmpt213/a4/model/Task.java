@@ -1,8 +1,10 @@
+package ca.cmpt213.a4.model;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * Task models the information about a task that has or needs to be completed.
+ * ca.cmpt213.a4.model.Task models the information about a task that has or needs to be completed.
  * A task includes its name, notes regarding the task, the due date, and
  * whether or not the task has been completed. Features include retrieving the
  * attributes of the project, formatting the date to a proper string format and
@@ -49,7 +51,7 @@ public class Task implements Comparable<Task> {
 
     @Override
     public String toString() {
-        String result = "Task: " + this.getName() + "\n" + "Notes: " + getNotes() + "\n"
+        String result = "ca.cmpt213.a4.model.Task: " + this.getName() + "\n" + "Notes: " + getNotes() + "\n"
                         + "Due date: " + getDateFormatted();
         return result;
     }
