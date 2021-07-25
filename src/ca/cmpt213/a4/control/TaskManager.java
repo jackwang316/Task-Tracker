@@ -164,7 +164,7 @@ public class TaskManager {
             toDelete--;     //Selected task is stored at index i-1
             String deletedName = tasks.get(toDelete).getName();
             tasks.remove(toDelete);
-            System.out.println("ca.cmpt213.a4.model.Task " + deletedName + " has been removed from the list of tasks");
+            System.out.println("Task " + deletedName + " has been removed from the list of tasks");
         }
     }
 
@@ -175,7 +175,7 @@ public class TaskManager {
             Task temp = tasks.get(i);
             if(!temp.isComplete()){
                 hasIncomplete = true;
-                System.out.println("ca.cmpt213.a4.model.Task #" + (i+1));
+                System.out.println("Task #" + (i+1));
                 System.out.println(tasks.get(i));
             }
         }
@@ -192,7 +192,7 @@ public class TaskManager {
         if(toMark > 0) {
             toMark--;
             tasks.get(toMark).setComplete();
-            System.out.println("ca.cmpt213.a4.model.Task " + tasks.get(toMark).getName() + " is now completed.");
+            System.out.println("Task " + tasks.get(toMark).getName() + " is now completed.");
         }
     }
 
@@ -205,7 +205,7 @@ public class TaskManager {
             Task temp = tasks.get(i);
             if(current.after(temp.getDueDate()) && !temp.isComplete()){
                 hasOverDue = true;
-                System.out.println("ca.cmpt213.a4.model.Task #" + (i+1));
+                System.out.println("Task #" + (i+1));
                 System.out.println(tasks.get(i));
             }
         }

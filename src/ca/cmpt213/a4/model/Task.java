@@ -51,7 +51,7 @@ public class Task implements Comparable<Task> {
 
     @Override
     public String toString() {
-        String result = "ca.cmpt213.a4.model.Task: " + this.getName() + "\n" + "Notes: " + getNotes() + "\n"
+        String result = "Task: " + this.getName() + "\n" + "Notes: " + getNotes() + "\n"
                         + "Due date: " + getDateFormatted();
         return result;
     }
