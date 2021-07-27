@@ -45,8 +45,8 @@ public class Task implements Comparable<Task> {
                 + ":" + dueDate.get(Calendar.MINUTE);
     }
 
-    public void setComplete(){
-        this.isComplete = true;
+    public void setComplete(boolean isComplete){
+        this.isComplete = isComplete;
     }
 
     @Override
