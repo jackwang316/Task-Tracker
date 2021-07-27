@@ -1,10 +1,10 @@
 package ca.cmpt213.a4.model;
 
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 /**
- * ca.cmpt213.a4.model.Task models the information about a task that has or needs to be completed.
+ * Task models the information about a task that has or needs to be completed.
  * A task includes its name, notes regarding the task, the due date, and
  * whether or not the task has been completed. Features include retrieving the
  * attributes of the project, formatting the date to a proper string format and
@@ -40,9 +40,9 @@ public class Task implements Comparable<Task> {
     }
 
     public String getDateFormatted(){
-        return dueDate.get(Calendar.YEAR) + "-" + dueDate.get(Calendar.MONTH)
-                + "-" + dueDate.get(Calendar.DAY_OF_MONTH) + " " + dueDate.get(Calendar.HOUR_OF_DAY)
-                + ":" + dueDate.get(Calendar.MINUTE);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        dateFormat.setCalendar(this.dueDate);
+        return dateFormat.format(dueDate.getTime());
     }
 
     public void setComplete(boolean isComplete){
