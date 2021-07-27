@@ -24,12 +24,11 @@ import java.util.*;
  */
 
 public class TaskManager {
-    private ArrayList<Task> tasks;
+    public ArrayList<Task> tasks;
     private Calendar current = Calendar.getInstance();
 
     public TaskManager(){
         tasks = new ArrayList<>();
-        current.add(Calendar.MONTH, 1); //Month starts at 0 instead of 1.
         load();
     }
 
@@ -86,7 +85,7 @@ public class TaskManager {
         }
     }
 
-    private void save(){
+    public void save(){
         try {
             //https://attacomsian.com/blog/gson-write-json-file
             Gson gson = new Gson();
@@ -102,5 +101,12 @@ public class TaskManager {
     public void exit(){
         save();
         System.out.println("Thank you for using the system");
+    }
+
+    public static void main(String[] args) {
+        TaskManager tm = new TaskManager();
+        GregorianCalendar calendar = new GregorianCalendar(2021, 10, 21, 12, 45);
+        tm.tasks.add(new Task("Hello", "Check", calendar));
+        tm.exit();
     }
 }
