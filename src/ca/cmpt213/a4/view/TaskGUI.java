@@ -56,13 +56,18 @@ public class TaskGUI extends JFrame{
         for(int i = 0; i < toDisplay.size(); i++) {
             initTaskPanel(toDisplay.get(i), taskBackGround, i);
         }
-        JScrollPane scrollPane = new JScrollPane(taskBackGround, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane scrollPane = new JScrollPane(taskBackGround);
+        scrollPane.getViewport().setPreferredSize(new Dimension(500, 400));
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getViewport().setView(taskBackGround);
         midPanel.add(scrollPane);
     }
 
     private void initTaskPanel(Task t, JPanel panel, int i) {
         JPanel taskPanel = new JPanel(new BorderLayout());
         taskPanel.setSize(new Dimension(400, 100));
+        taskPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         JLabel titleBox = new JLabel("Task #" + (i + 1));
         taskPanel.add(titleBox, BorderLayout.NORTH);
 
