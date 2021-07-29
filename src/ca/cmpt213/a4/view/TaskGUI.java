@@ -13,60 +13,96 @@ public class TaskGUI extends JFrame{
     public final static int WINDOW_HEIGHT = 720;
     public final static int BUTTON_PREFER_WIDTH = 100;
     public final static int BUTTON_PREFER_HEIGHT = 25;
-    JFrame taskFrame;
-    JPanel topButtonPanel;
-    JPanel midPanel;
-    JPanel bottomButtonPanel;
-    JButton allButton;
-    JButton overdueButton;
-    JButton upcomingButton;
-    JButton addNewButton;
-    TaskManager manager = new TaskManager();
+    public final static int SCROLL_PREFER_WIDTH = 500;
+    public final static int SCROLL_PREFER_HEIGHT = 200;
+    private JFrame taskFrame;
+    private JPanel topButtonPanel;
+    private JPanel cards;
+    private JPanel bottomButtonPanel;
+
+    private JScrollPane allTaskScroll;
+    private JPanel allTasksPane;
+    private JScrollPane overdueScroll;
+    private JPanel overduePane;
+    private JScrollPane upcomingScroll;
+    private JPanel upcomingPane;
+
+    private CardLayout cardLayout;
+    private JButton allButton;
+    private JButton overdueButton;
+    private JButton upcomingButton;
+    private JButton addNewButton;
+    private TaskManager manager;
 
     public TaskGUI() {
         taskFrame = new JFrame("My To-Do List");
         taskFrame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        manager = new TaskManager();
 
         initAllButton();
         initOverdueButton();
         initUpcomingButton();
 
         initTopPanel();
-        initMidPanel();
+        initCardPanel();
         initBottomPanel();
-        displayAllTask();
+
+        initAllTaskPanel();
+        initOverduePanel();
+        initUpcomingPanel();
 
         taskFrame.setVisible(true);
         taskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initOnClose();
     }
 
-    private void displayAllTask() {
-        ArrayList<Task> toDisplay = manager.getAllTasks();
-        JPanel taskBackGround = new JPanel();
-        taskBackGround.setLayout(new BoxLayout(taskBackGround, BoxLayout.Y_AXIS));
-        if(toDisplay.isEmpty()) {
-            JTextField emptyBox = new JTextField("No task to show");
-            emptyBox.setEnabled(false);
-            emptyBox.setDisabledTextColor(Color.BLACK);
-            taskBackGround.add(emptyBox);
-            midPanel.add(emptyBox);
-            return;
+    private void initAllTaskPanel() {
+        ArrayList<Task> temp = manager.getAllTasks();
+        allTasksPane = new JPanel();
+        allTasksPane.setLayout(new BoxLayout(allTasksPane, BoxLayout.Y_AXIS));
+        for(int i = 0; i < temp.size(); i++) {
+            initTaskPanel(temp.get(i), allTasksPane, i, true);
         }
-        for(int i = 0; i < toDisplay.size(); i++) {
-            initTaskPanel(toDisplay.get(i), taskBackGround, i);
-        }
-        JScrollPane scrollPane = new JScrollPane(taskBackGround);
-        scrollPane.getViewport().setPreferredSize(new Dimension(500, 400));
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.getViewport().setView(taskBackGround);
-        midPanel.add(scrollPane);
+        allTaskScroll = new JScrollPane();
+        allTaskScroll.getViewport().setPreferredSize(new Dimension(SCROLL_PREFER_WIDTH, SCROLL_PREFER_HEIGHT));
+        allTaskScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        allTaskScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        allTaskScroll.getViewport().setView(allTasksPane);
+        cards.add(allTaskScroll, "All");
     }
 
-    private void initTaskPanel(Task t, JPanel panel, int i) {
+    private void initOverduePanel() {
+        ArrayList<Task> temp = manager.getOverdue();
+        overduePane = new JPanel();
+        overduePane.setLayout(new BoxLayout(overduePane, BoxLayout.Y_AXIS));
+        for(int i = 0; i < temp.size(); i++) {
+            initTaskPanel(temp.get(i), overduePane, i, false);
+        }
+        overdueScroll = new JScrollPane();
+        overdueScroll.getViewport().setPreferredSize(new Dimension(SCROLL_PREFER_WIDTH, SCROLL_PREFER_HEIGHT));
+        overdueScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        overdueScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        overdueScroll.getViewport().setView(overduePane);
+        cards.add(overdueScroll, "Overdue");
+    }
+
+    private void initUpcomingPanel() {
+        ArrayList<Task> temp = manager.getUpcoming();
+        upcomingPane = new JPanel();
+        upcomingPane.setLayout(new BoxLayout(upcomingPane, BoxLayout.Y_AXIS));
+        for(int i = 0; i < temp.size(); i++) {
+            initTaskPanel(temp.get(i), upcomingPane, i, false);
+        }
+        upcomingScroll = new JScrollPane();
+        upcomingScroll.getViewport().setPreferredSize(new Dimension(SCROLL_PREFER_WIDTH, SCROLL_PREFER_HEIGHT));
+        upcomingScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        upcomingScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        upcomingScroll.getViewport().setView(upcomingPane);
+        cards.add(upcomingScroll, "Upcoming");
+    }
+
+    private void initTaskPanel(Task t, JPanel panel, int i, boolean hasButtons) {
         JPanel taskPanel = new JPanel(new BorderLayout());
-        taskPanel.setSize(new Dimension(400, 100));
         taskPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         JLabel titleBox = new JLabel("Task #" + (i + 1));
         taskPanel.add(titleBox, BorderLayout.NORTH);
@@ -82,7 +118,15 @@ public class TaskGUI extends JFrame{
         infoPane.add(dateBox, BorderLayout.SOUTH);
         taskPanel.add(infoPane, BorderLayout.CENTER);
 
+        if(hasButtons) {
+            addPanels(t, panel, taskPanel);
+        }
+        panel.add(taskPanel);
+    }
+
+    private void addPanels(Task t, JPanel panel, JPanel taskPanel) {
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
         JCheckBox completeCheck = new JCheckBox("Completed", t.isComplete());
         initCheckButton(completeCheck, t, taskPanel);
         buttons.add(completeCheck, BorderLayout.AFTER_LAST_LINE);
@@ -91,7 +135,6 @@ public class TaskGUI extends JFrame{
         initDeleteButton(t, deleteButton, taskPanel, panel);
         buttons.add(deleteButton);
         taskPanel.add(buttons, BorderLayout.SOUTH);
-        panel.add(taskPanel);
     }
 
     private void initDeleteButton(Task t, JButton deleteButton, JPanel taskPanel, JPanel backGroundPanel) {
@@ -99,7 +142,6 @@ public class TaskGUI extends JFrame{
             manager.delete(t);
             backGroundPanel.remove(taskPanel);
             backGroundPanel.revalidate();
-            backGroundPanel.updateUI();
             backGroundPanel.repaint();
         });
     }
@@ -119,7 +161,7 @@ public class TaskGUI extends JFrame{
         allButton = new JButton("All");
         allButton.setPreferredSize(new Dimension(BUTTON_PREFER_WIDTH, BUTTON_PREFER_HEIGHT));
         allButton.addActionListener(e -> {
-            //Todo: add stuff related to all button.
+            cardLayout.show(cards, "All");
         });
     }
 
@@ -127,7 +169,7 @@ public class TaskGUI extends JFrame{
         overdueButton = new JButton("Overdue");
         overdueButton.setPreferredSize(new Dimension(BUTTON_PREFER_WIDTH, BUTTON_PREFER_HEIGHT));
         overdueButton.addActionListener(e -> {
-            //Todo: add stuff related to overdue button.
+            cardLayout.show(cards, "Overdue");
         });
     }
 
@@ -135,13 +177,14 @@ public class TaskGUI extends JFrame{
         upcomingButton = new JButton("Upcoming");
         upcomingButton.setPreferredSize(new Dimension(BUTTON_PREFER_WIDTH, BUTTON_PREFER_HEIGHT));
         upcomingButton.addActionListener(e -> {
-            //Todo: add stuff related to upcoming button.
+            cardLayout.show(cards, "Upcoming");
         });
     }
 
-    private void initMidPanel() {
-        midPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        taskFrame.add(midPanel, BorderLayout.CENTER);
+    private void initCardPanel() {
+        cardLayout = new CardLayout();
+        cards = new JPanel(cardLayout);
+        taskFrame.add(cards, BorderLayout.CENTER);
     }
 
     public void initTopPanel() {

@@ -53,7 +53,7 @@ public class TaskManager {
     public ArrayList<Task> getOverdue() {
         ArrayList<Task> result = new ArrayList<>();
         for(Task t : tasks) {
-            if (current.after(t.getDueDate())) {
+            if (t.isOverdue()) {
                 result.add(t);
             }
         }
@@ -63,7 +63,7 @@ public class TaskManager {
     public ArrayList<Task> getUpcoming() {
         ArrayList<Task> result = new ArrayList<>();
         for(Task t : tasks) {
-            if(current.before(t.getDueDate())) {
+            if(!t.isOverdue()) {
                 result.add(t);
             }
         }
@@ -105,8 +105,12 @@ public class TaskManager {
 
     public static void main(String[] args) {
         TaskManager tm = new TaskManager();
-        GregorianCalendar calendar = new GregorianCalendar(2021, 10, 21, 12, 45);
-        tm.tasks.add(new Task("Hello", "Check", calendar));
+//        GregorianCalendar calendar = new GregorianCalendar(2020, 10, 21, 12, 45);
+//        tm.tasks.add(new Task("Hello", "Check", calendar));
+        ArrayList<Task> temp = tm.getUpcoming();
+        for(Task t : temp) {
+            System.out.printf(t.toString());
+        }
         tm.exit();
     }
 }

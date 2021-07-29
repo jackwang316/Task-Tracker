@@ -1,6 +1,7 @@
 package ca.cmpt213.a4.model;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -25,6 +26,11 @@ public class Task implements Comparable<Task> {
 
     public String getName() {
         return this.name;
+    }
+
+    public boolean isOverdue(){
+        Calendar current = Calendar.getInstance();
+        return current.after(this.dueDate);
     }
 
     public String getNotes() {
