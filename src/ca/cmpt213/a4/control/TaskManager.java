@@ -44,6 +44,7 @@ public class TaskManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        sortByDate();
     }
 
     public ArrayList<Task> getAllTasks() {
@@ -83,6 +84,10 @@ public class TaskManager {
         if(location != -1) {
             tasks.get(location).setComplete(isComplete);
         }
+    }
+
+    private void sortByDate() {
+        Collections.sort(tasks);
     }
 
     public void save(){
