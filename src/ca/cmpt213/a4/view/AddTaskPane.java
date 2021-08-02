@@ -9,12 +9,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AddTaskPane extends JFrame{
+public class AddTaskPane extends JDialog{
     private static final int DIALOG_WIDTH = 400;
-    private static final int DIALOG_HEIGHT = 600;
-    private static final int FIELD_WIDTH = 100;
+    private static final int DIALOG_HEIGHT = 300;
+    private static final int FIELD_WIDTH = 300;
     private static final int FIELD_HEIGHT = 25;
-    private JDialog dialog;
+    private static final int PADDING = 20;
     private Task added;
     private JTextField nameInput;
     private JTextField notesInput;
@@ -23,19 +23,18 @@ public class AddTaskPane extends JFrame{
     private DatePicker datePicker;
 
     public AddTaskPane() {
-        this.dialog = new JDialog();
-        this.dialog.setSize(new Dimension(DIALOG_WIDTH, DIALOG_HEIGHT));
-        this.dialog.setTitle("Add Task");
+        setSize(new Dimension(DIALOG_WIDTH, DIALOG_HEIGHT));
+        setTitle("Add Task");
         this.dialogPane = new JPanel();
         this.dialogPane.setLayout(new BoxLayout(dialogPane, BoxLayout.Y_AXIS));
-        this.dialog.add(dialogPane);
+        add(dialogPane);
         this.initLayout();
-        dialog.setVisible(true);
-        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setVisible(true);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     private void initLayout() {
-        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING, PADDING, 0));
         JLabel namePrompt = new JLabel("Name:");
         this.nameInput = new JTextField();
         this.nameInput.setPreferredSize(new Dimension(FIELD_WIDTH, FIELD_HEIGHT));
@@ -43,7 +42,7 @@ public class AddTaskPane extends JFrame{
         namePanel.add(namePrompt);
         namePanel.add(nameInput);
 
-        JPanel notesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel notesPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, PADDING, 0));
         JLabel notesPrompt = new JLabel("Notes:");
         this.notesInput = new JTextField();
         this.notesInput.setPreferredSize(new Dimension(FIELD_WIDTH, FIELD_HEIGHT));
@@ -51,7 +50,7 @@ public class AddTaskPane extends JFrame{
         notesPanel.add(notesPrompt);
         notesPanel.add(notesInput);
 
-        JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEADING, PADDING, 0));
         JLabel datesPrompt = new JLabel("Due Date");
         timePicker = new TimePicker();
         datePicker = new DatePicker();
