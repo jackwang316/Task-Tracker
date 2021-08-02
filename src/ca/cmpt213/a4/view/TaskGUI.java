@@ -119,16 +119,16 @@ public class TaskGUI extends JFrame{
         taskPanel.add(infoPane, BorderLayout.CENTER);
 
         if(hasButtons) {
-            addPanels(t, panel, taskPanel);
+            addButtons(t, panel, taskPanel);
         }
         panel.add(taskPanel);
     }
 
-    private void addPanels(Task t, JPanel panel, JPanel taskPanel) {
+    private void addButtons(Task t, JPanel panel, JPanel taskPanel) {
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         JCheckBox completeCheck = new JCheckBox("Completed", t.isComplete());
-        initCheckButton(completeCheck, t, taskPanel);
+        initCheckButton(completeCheck, t);
         buttons.add(completeCheck, BorderLayout.AFTER_LAST_LINE);
 
         JButton deleteButton = new JButton("Remove Task");
@@ -146,7 +146,7 @@ public class TaskGUI extends JFrame{
         });
     }
 
-    private void initCheckButton(JCheckBox checkBox, Task t, JPanel taskPanel) {
+    private void initCheckButton(JCheckBox checkBox, Task t) {
         checkBox.addActionListener(e -> {
             if(checkBox.isSelected()) {
                 manager.markAsComplete(t, true);
@@ -160,25 +160,19 @@ public class TaskGUI extends JFrame{
     public void initAllButton() {
         allButton = new JButton("All");
         allButton.setPreferredSize(new Dimension(BUTTON_PREFER_WIDTH, BUTTON_PREFER_HEIGHT));
-        allButton.addActionListener(e -> {
-            cardLayout.show(cards, "All");
-        });
+        allButton.addActionListener(e -> cardLayout.show(cards, "All"));
     }
 
     public void initOverdueButton() {
         overdueButton = new JButton("Overdue");
         overdueButton.setPreferredSize(new Dimension(BUTTON_PREFER_WIDTH, BUTTON_PREFER_HEIGHT));
-        overdueButton.addActionListener(e -> {
-            cardLayout.show(cards, "Overdue");
-        });
+        overdueButton.addActionListener(e -> cardLayout.show(cards, "Overdue"));
     }
 
     public void initUpcomingButton() {
         upcomingButton = new JButton("Upcoming");
         upcomingButton.setPreferredSize(new Dimension(BUTTON_PREFER_WIDTH, BUTTON_PREFER_HEIGHT));
-        upcomingButton.addActionListener(e -> {
-            cardLayout.show(cards, "Upcoming");
-        });
+        upcomingButton.addActionListener(e -> cardLayout.show(cards, "Upcoming"));
     }
 
     private void initCardPanel() {
