@@ -23,21 +23,21 @@ import java.util.*;
  * Note the main method is also in this class.
  */
 
-public class TaskManager {
+public class TaskController {
     public ArrayList<Task> tasks;
-    private Calendar current = Calendar.getInstance();
 
-    public TaskManager(){
+    public TaskController() {
         tasks = new ArrayList<>();
         load();
     }
 
-    private void load(){
+    private void load() {
         Gson gson = new Gson();
         try {
             //https://howtodoinjava.com/gson/gson-parse-json-array/
             JsonReader reader = new JsonReader(new FileReader("task.csv"));
-            Type taskListType = new TypeToken<ArrayList<Task>>(){}.getType();
+            Type taskListType = new TypeToken<ArrayList<Task>>() {
+            }.getType();
             tasks = gson.fromJson(reader, taskListType);
             reader.close();
         } catch (FileNotFoundException e) {
@@ -53,7 +53,7 @@ public class TaskManager {
 
     public ArrayList<Task> getOverdue() {
         ArrayList<Task> result = new ArrayList<>();
-        for(Task t : tasks) {
+        for (Task t : tasks) {
             if (t.isOverdue()) {
                 result.add(t);
             }
@@ -61,27 +61,31 @@ public class TaskManager {
         return result;
     }
 
+    public int getSize() {
+        return tasks.size();
+    }
+
     public ArrayList<Task> getUpcoming() {
         ArrayList<Task> result = new ArrayList<>();
-        for(Task t : tasks) {
-            if(!t.isOverdue()) {
+        for (Task t : tasks) {
+            if (!t.isOverdue()) {
                 result.add(t);
             }
         }
         return result;
     }
 
-    public void addTask(String name, String notes, GregorianCalendar dueDate){
-        tasks.add(new Task(name, notes, dueDate));
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 
-    public void delete(Task task){
+    public void delete(Task task) {
         tasks.remove(task);
     }
 
     public void markAsComplete(Task task, boolean isComplete) {
         int location = tasks.indexOf(task);
-        if(location != -1) {
+        if (location != -1) {
             tasks.get(location).setComplete(isComplete);
         }
     }
@@ -90,7 +94,7 @@ public class TaskManager {
         Collections.sort(tasks);
     }
 
-    public void save(){
+    public void save() {
         try {
             //https://attacomsian.com/blog/gson-write-json-file
             Gson gson = new Gson();
@@ -103,19 +107,8 @@ public class TaskManager {
         }
     }
 
-    public void exit(){
+    public void exit() {
         save();
         System.out.println("Thank you for using the system");
-    }
-
-    public static void main(String[] args) {
-        TaskManager tm = new TaskManager();
-//        GregorianCalendar calendar = new GregorianCalendar(2020, 10, 21, 12, 45);
-//        tm.tasks.add(new Task("Hello", "Check", calendar));
-        ArrayList<Task> temp = tm.getUpcoming();
-        for(Task t : temp) {
-            System.out.printf(t.toString());
-        }
-        tm.exit();
     }
 }

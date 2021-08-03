@@ -17,7 +17,7 @@ public class Task implements Comparable<Task> {
     private GregorianCalendar dueDate;
     private boolean isComplete;
 
-    public Task(String name, String notes, GregorianCalendar dueDate){
+    public Task(String name, String notes, GregorianCalendar dueDate) {
         this.name = name;
         this.notes = notes;
         this.dueDate = dueDate;
@@ -28,7 +28,7 @@ public class Task implements Comparable<Task> {
         return this.name;
     }
 
-    public boolean isOverdue(){
+    public boolean isOverdue() {
         Calendar current = Calendar.getInstance();
         return current.after(this.dueDate);
     }
@@ -37,28 +37,28 @@ public class Task implements Comparable<Task> {
         return this.notes;
     }
 
-    public boolean isComplete(){
+    public boolean isComplete() {
         return this.isComplete;
     }
 
-    public GregorianCalendar getDueDate(){
-        return  this.dueDate;
+    public GregorianCalendar getDueDate() {
+        return this.dueDate;
     }
 
-    public String getDateFormatted(){
+    public String getDateFormatted() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         dateFormat.setCalendar(this.dueDate);
         return dateFormat.format(dueDate.getTime());
     }
 
-    public void setComplete(boolean isComplete){
+    public void setComplete(boolean isComplete) {
         this.isComplete = isComplete;
     }
 
     @Override
     public String toString() {
         String result = "Task: " + this.getName() + "\n" + "Notes: " + getNotes() + "\n"
-                        + "Due date: " + getDateFormatted();
+                + "Due date: " + getDateFormatted();
         return result;
     }
 

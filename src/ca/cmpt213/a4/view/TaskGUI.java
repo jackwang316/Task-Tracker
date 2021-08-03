@@ -1,14 +1,15 @@
 package ca.cmpt213.a4.view;
 
-import ca.cmpt213.a4.control.TaskManager;
+import ca.cmpt213.a4.control.TaskController;
 import ca.cmpt213.a4.model.Task;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
-public class TaskGUI extends JFrame{
+public class TaskGUI extends JFrame {
     public final static int WINDOW_WIDTH = 700;
     public final static int WINDOW_HEIGHT = 720;
     public final static int BUTTON_PREFER_WIDTH = 100;
@@ -32,12 +33,12 @@ public class TaskGUI extends JFrame{
     private JButton overdueButton;
     private JButton upcomingButton;
     private JButton addNewButton;
-    private TaskManager manager;
+    private final TaskController controller;
 
     public TaskGUI() {
         taskFrame = new JFrame("My To-Do List");
         taskFrame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        manager = new TaskManager();
+        controller = new TaskController();
 
         initAllButton();
         initOverdueButton();
@@ -46,6 +47,7 @@ public class TaskGUI extends JFrame{
         initTopPanel();
         initCardPanel();
         initBottomPanel();
+        initAddButton();
 
         initAllTaskPanel();
         initOverduePanel();
@@ -57,10 +59,10 @@ public class TaskGUI extends JFrame{
     }
 
     private void initAllTaskPanel() {
-        ArrayList<Task> temp = manager.getAllTasks();
+        ArrayList<Task> temp = controller.getAllTasks();
         allTasksPane = new JPanel();
         allTasksPane.setLayout(new BoxLayout(allTasksPane, BoxLayout.Y_AXIS));
-        for(int i = 0; i < temp.size(); i++) {
+        for (int i = 0; i < temp.size(); i++) {
             initTaskPanel(temp.get(i), allTasksPane, i, true);
         }
         allTaskScroll = new JScrollPane();
@@ -72,10 +74,10 @@ public class TaskGUI extends JFrame{
     }
 
     private void initOverduePanel() {
-        ArrayList<Task> temp = manager.getOverdue();
+        ArrayList<Task> temp = controller.getOverdue();
         overduePane = new JPanel();
         overduePane.setLayout(new BoxLayout(overduePane, BoxLayout.Y_AXIS));
-        for(int i = 0; i < temp.size(); i++) {
+        for (int i = 0; i < temp.size(); i++) {
             initTaskPanel(temp.get(i), overduePane, i, false);
         }
         overdueScroll = new JScrollPane();
@@ -87,10 +89,10 @@ public class TaskGUI extends JFrame{
     }
 
     private void initUpcomingPanel() {
-        ArrayList<Task> temp = manager.getUpcoming();
+        ArrayList<Task> temp = controller.getUpcoming();
         upcomingPane = new JPanel();
         upcomingPane.setLayout(new BoxLayout(upcomingPane, BoxLayout.Y_AXIS));
-        for(int i = 0; i < temp.size(); i++) {
+        for (int i = 0; i < temp.size(); i++) {
             initTaskPanel(temp.get(i), upcomingPane, i, false);
         }
         upcomingScroll = new JScrollPane();
@@ -118,7 +120,7 @@ public class TaskGUI extends JFrame{
         infoPane.add(dateBox, BorderLayout.SOUTH);
         taskPanel.add(infoPane, BorderLayout.CENTER);
 
-        if(hasButtons) {
+        if (hasButtons) {
             addButtons(t, panel, taskPanel);
         }
         panel.add(taskPanel);
@@ -139,7 +141,7 @@ public class TaskGUI extends JFrame{
 
     private void initDeleteButton(Task t, JButton deleteButton, JPanel taskPanel, JPanel backGroundPanel) {
         deleteButton.addActionListener(e -> {
-            manager.delete(t);
+            controller.delete(t);
             backGroundPanel.remove(taskPanel);
             backGroundPanel.revalidate();
             backGroundPanel.repaint();
@@ -147,14 +149,7 @@ public class TaskGUI extends JFrame{
     }
 
     private void initCheckButton(JCheckBox checkBox, Task t) {
-        checkBox.addActionListener(e -> {
-            if(checkBox.isSelected()) {
-                manager.markAsComplete(t, true);
-
-            }else {
-                manager.markAsComplete(t, false);
-            }
-        });
+        checkBox.addActionListener(e -> controller.markAsComplete(t, checkBox.isSelected()));
     }
 
     public void initAllButton() {
@@ -173,6 +168,24 @@ public class TaskGUI extends JFrame{
         upcomingButton = new JButton("Upcoming");
         upcomingButton.setPreferredSize(new Dimension(BUTTON_PREFER_WIDTH, BUTTON_PREFER_HEIGHT));
         upcomingButton.addActionListener(e -> cardLayout.show(cards, "Upcoming"));
+    }
+
+    private void initAddButton() {
+        addNewButton.addActionListener(e -> {
+            AddTaskDialog dialog = new AddTaskDialog();
+            dialog.setModal(true);
+            dialog.setVisible(true);
+
+            String name = dialog.getNameInput();
+            String notes = dialog.getNoteInput();
+            GregorianCalendar dueDate = dialog.getDateInput();
+
+            Task temp = new Task(name, notes, dueDate);
+            controller.addTask(temp);
+            initTaskPanel(temp, allTasksPane, controller.getSize() - 1, true);
+            allTasksPane.revalidate();
+            allTasksPane.repaint();
+        });
     }
 
     private void initCardPanel() {
@@ -201,7 +214,7 @@ public class TaskGUI extends JFrame{
         taskFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                manager.save();
+                controller.save();
                 super.windowClosing(e);
             }
         });
