@@ -16,6 +16,10 @@ public class TaskGUI extends JFrame {
     public final static int BUTTON_PREFER_HEIGHT = 25;
     public final static int SCROLL_PREFER_WIDTH = 500;
     public final static int SCROLL_PREFER_HEIGHT = 200;
+    public static final int LABEL_MAX_WIDTH = 100;
+    public static final int LABEL_MAX_HEIGHT = 25;
+    public static final int PANEL_MAX_WIDTH = 600;
+    public static final int PANEL_MAX_HEIGHT = 140;
     private JFrame taskFrame;
     private JPanel topButtonPanel;
     private JPanel cards;
@@ -66,9 +70,7 @@ public class TaskGUI extends JFrame {
             initTaskPanel(temp.get(i), allTasksPane, i, true);
         }
         allTaskScroll = new JScrollPane();
-        allTaskScroll.getViewport().setPreferredSize(new Dimension(SCROLL_PREFER_WIDTH, SCROLL_PREFER_HEIGHT));
-        allTaskScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        allTaskScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        initScrollPane(allTaskScroll);
         allTaskScroll.getViewport().setView(allTasksPane);
         cards.add(allTaskScroll, "All");
     }
@@ -81,9 +83,7 @@ public class TaskGUI extends JFrame {
             initTaskPanel(temp.get(i), overduePane, i, false);
         }
         overdueScroll = new JScrollPane();
-        overdueScroll.getViewport().setPreferredSize(new Dimension(SCROLL_PREFER_WIDTH, SCROLL_PREFER_HEIGHT));
-        overdueScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        overdueScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        initScrollPane(overdueScroll);
         overdueScroll.getViewport().setView(overduePane);
         cards.add(overdueScroll, "Overdue");
     }
@@ -96,27 +96,38 @@ public class TaskGUI extends JFrame {
             initTaskPanel(temp.get(i), upcomingPane, i, false);
         }
         upcomingScroll = new JScrollPane();
-        upcomingScroll.getViewport().setPreferredSize(new Dimension(SCROLL_PREFER_WIDTH, SCROLL_PREFER_HEIGHT));
-        upcomingScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        upcomingScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        initScrollPane(upcomingScroll);
         upcomingScroll.getViewport().setView(upcomingPane);
         cards.add(upcomingScroll, "Upcoming");
     }
 
+    private void initScrollPane(JScrollPane scrollPane) {
+        scrollPane.getViewport().setPreferredSize(new Dimension(SCROLL_PREFER_WIDTH, SCROLL_PREFER_HEIGHT));
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setMaximumSize(scrollPane.getPreferredSize());
+    }
+
     private void initTaskPanel(Task t, JPanel panel, int i, boolean hasButtons) {
         JPanel taskPanel = new JPanel(new BorderLayout());
+        taskPanel.setMaximumSize(new Dimension(PANEL_MAX_WIDTH, PANEL_MAX_HEIGHT));
+        taskPanel.setPreferredSize(taskPanel.getMaximumSize());
         taskPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         JLabel titleBox = new JLabel("Task #" + (i + 1));
+        titleBox.setMaximumSize(new Dimension(LABEL_MAX_WIDTH, LABEL_MAX_HEIGHT));
         taskPanel.add(titleBox, BorderLayout.NORTH);
 
         JPanel infoPane = new JPanel(new BorderLayout());
         JLabel nameBox = new JLabel("Name: " + t.getName());
+        nameBox.setMaximumSize(new Dimension(LABEL_MAX_WIDTH, LABEL_MAX_HEIGHT));
         infoPane.add(nameBox, BorderLayout.NORTH);
 
         JLabel notesBox = new JLabel("Notes: " + t.getNotes());
+        notesBox.setMaximumSize(new Dimension(LABEL_MAX_WIDTH, LABEL_MAX_HEIGHT));
         infoPane.add(notesBox, BorderLayout.CENTER);
 
         JLabel dateBox = new JLabel("Due date: " + t.getDateFormatted());
+        dateBox.setMaximumSize(new Dimension(LABEL_MAX_WIDTH, LABEL_MAX_HEIGHT));
         infoPane.add(dateBox, BorderLayout.SOUTH);
         taskPanel.add(infoPane, BorderLayout.CENTER);
 
@@ -142,6 +153,7 @@ public class TaskGUI extends JFrame {
     private void initDeleteButton(Task t, JButton deleteButton, JPanel taskPanel, JPanel backGroundPanel) {
         deleteButton.addActionListener(e -> {
             controller.delete(t);
+            controller.save();
             backGroundPanel.remove(taskPanel);
             backGroundPanel.revalidate();
             backGroundPanel.repaint();
@@ -149,7 +161,10 @@ public class TaskGUI extends JFrame {
     }
 
     private void initCheckButton(JCheckBox checkBox, Task t) {
-        checkBox.addActionListener(e -> controller.markAsComplete(t, checkBox.isSelected()));
+        checkBox.addActionListener(e -> {
+            controller.markAsComplete(t, checkBox.isSelected());
+            controller.save();
+        });
     }
 
     public void initAllButton() {
@@ -182,6 +197,7 @@ public class TaskGUI extends JFrame {
 
             Task temp = new Task(name, notes, dueDate);
             controller.addTask(temp);
+            controller.save();
             initTaskPanel(temp, allTasksPane, controller.getSize() - 1, true);
             allTasksPane.revalidate();
             allTasksPane.repaint();

@@ -106,9 +106,4 @@ public class TaskController {
             System.err.println("Cannot save to file.");
         }
     }
-
-    public void exit() {
-        save();
-        System.out.println("Thank you for using the system");
-    }
 }
