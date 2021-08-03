@@ -31,7 +31,7 @@ public class TaskGUI extends JFrame {
     private JPanel overduePane;
     private JScrollPane upcomingScroll;
     private JPanel upcomingPane;
-
+    private JLabel noTasks;
     private CardLayout cardLayout;
     private JButton allButton;
     private JButton overdueButton;
@@ -66,9 +66,16 @@ public class TaskGUI extends JFrame {
         ArrayList<Task> temp = controller.getAllTasks();
         allTasksPane = new JPanel();
         allTasksPane.setLayout(new BoxLayout(allTasksPane, BoxLayout.Y_AXIS));
-        for (int i = 0; i < temp.size(); i++) {
-            initTaskPanel(temp.get(i), allTasksPane, i, true);
+
+        if(temp.isEmpty()) {
+            noTasks = new JLabel("No tasks to show.");
+            allTasksPane.add(noTasks);
+        }else {
+            for (int i = 0; i < temp.size(); i++) {
+                initTaskPanel(temp.get(i), allTasksPane, i, true);
+            }
         }
+
         allTaskScroll = new JScrollPane();
         initScrollPane(allTaskScroll);
         allTaskScroll.getViewport().setView(allTasksPane);
@@ -79,9 +86,16 @@ public class TaskGUI extends JFrame {
         ArrayList<Task> temp = controller.getOverdue();
         overduePane = new JPanel();
         overduePane.setLayout(new BoxLayout(overduePane, BoxLayout.Y_AXIS));
-        for (int i = 0; i < temp.size(); i++) {
-            initTaskPanel(temp.get(i), overduePane, i, false);
+
+        if(temp.isEmpty()) {
+            JLabel noOverdueBox = new JLabel("No overdue incomplete tasks to show.");
+            overduePane.add(noOverdueBox);
+        }else {
+            for (int i = 0; i < temp.size(); i++) {
+                initTaskPanel(temp.get(i), overduePane, i, false);
+            }
         }
+
         overdueScroll = new JScrollPane();
         initScrollPane(overdueScroll);
         overdueScroll.getViewport().setView(overduePane);
@@ -92,9 +106,16 @@ public class TaskGUI extends JFrame {
         ArrayList<Task> temp = controller.getUpcoming();
         upcomingPane = new JPanel();
         upcomingPane.setLayout(new BoxLayout(upcomingPane, BoxLayout.Y_AXIS));
-        for (int i = 0; i < temp.size(); i++) {
-            initTaskPanel(temp.get(i), upcomingPane, i, false);
+
+        if(temp.isEmpty()) {
+            JLabel noUpcomingBox = new JLabel("No upcoming incomplete tasks to show.");
+            upcomingPane.add(noUpcomingBox);
+        }else {
+            for (int i = 0; i < temp.size(); i++) {
+                initTaskPanel(temp.get(i), upcomingPane, i, false);
+            }
         }
+
         upcomingScroll = new JScrollPane();
         initScrollPane(upcomingScroll);
         upcomingScroll.getViewport().setView(upcomingPane);
@@ -109,6 +130,7 @@ public class TaskGUI extends JFrame {
     }
 
     private void initTaskPanel(Task t, JPanel panel, int i, boolean hasButtons) {
+        noTasks.setVisible(false);
         JPanel taskPanel = new JPanel(new BorderLayout());
         taskPanel.setMaximumSize(new Dimension(PANEL_MAX_WIDTH, PANEL_MAX_HEIGHT));
         taskPanel.setPreferredSize(taskPanel.getMaximumSize());
