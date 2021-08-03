@@ -1,0 +1,27 @@
+1. All task view:
+    To see the list of all the tasks added, simply click on the "All" button
+    at the top of the page. Note that this is the default view on startup.
+
+2. Adding a new task:
+    To add a new task, first click on the "Add Task" button. Next, in the popup window, fill in the "Name", "Notes",
+    and "Due date" and then click "Create". To generate a random task, click the "Generate" button, this will fill
+    out the "Name" and "Notes" fields but the due date will still need to be provided by the user.
+
+3. Remove a task:
+    Navigate to the all task view by clicking "All", find the task to be removed. Click on the "Remove Task"
+    button for the corresponding task.
+
+4. Mark a task as completed/incomplete:
+    To change the status of a task, first navigate to the all task view by clicking "All". Then find the
+    task that is to be changed. For each task, there will be a "Completed" checkbox, if the box is checked,
+    then the task is set to be completed, if not, then incomplete. Simply click on the checkbox to toggle
+    between the two states.
+
+5. List overdue incomplete tasks:
+    To see a list of all overdue incomplete tasks, click on the "Overdue" button at the top of the page.
+
+6. List upcoming incomplete tasks:
+    To see a list of all upcoming incomplete tasks, click on the "Upcoming" button at the top of the page.
+
+7. Exit
+    To exit, click on the red "X" button in the top right corner of the page.

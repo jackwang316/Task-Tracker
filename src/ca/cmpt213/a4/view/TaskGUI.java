@@ -67,10 +67,10 @@ public class TaskGUI extends JFrame {
         allTasksPane = new JPanel();
         allTasksPane.setLayout(new BoxLayout(allTasksPane, BoxLayout.Y_AXIS));
 
-        if(temp.isEmpty()) {
+        if (temp.isEmpty()) {
             noTasks = new JLabel("No tasks to show.");
             allTasksPane.add(noTasks);
-        }else {
+        } else {
             for (int i = 0; i < temp.size(); i++) {
                 initTaskPanel(temp.get(i), allTasksPane, i, true);
             }
@@ -87,10 +87,10 @@ public class TaskGUI extends JFrame {
         overduePane = new JPanel();
         overduePane.setLayout(new BoxLayout(overduePane, BoxLayout.Y_AXIS));
 
-        if(temp.isEmpty()) {
+        if (temp.isEmpty()) {
             JLabel noOverdueBox = new JLabel("No overdue incomplete tasks to show.");
             overduePane.add(noOverdueBox);
-        }else {
+        } else {
             for (int i = 0; i < temp.size(); i++) {
                 initTaskPanel(temp.get(i), overduePane, i, false);
             }
@@ -107,10 +107,10 @@ public class TaskGUI extends JFrame {
         upcomingPane = new JPanel();
         upcomingPane.setLayout(new BoxLayout(upcomingPane, BoxLayout.Y_AXIS));
 
-        if(temp.isEmpty()) {
+        if (temp.isEmpty()) {
             JLabel noUpcomingBox = new JLabel("No upcoming incomplete tasks to show.");
             upcomingPane.add(noUpcomingBox);
-        }else {
+        } else {
             for (int i = 0; i < temp.size(); i++) {
                 initTaskPanel(temp.get(i), upcomingPane, i, false);
             }
@@ -130,7 +130,6 @@ public class TaskGUI extends JFrame {
     }
 
     private void initTaskPanel(Task t, JPanel panel, int i, boolean hasButtons) {
-        noTasks.setVisible(false);
         JPanel taskPanel = new JPanel(new BorderLayout());
         taskPanel.setMaximumSize(new Dimension(PANEL_MAX_WIDTH, PANEL_MAX_HEIGHT));
         taskPanel.setPreferredSize(taskPanel.getMaximumSize());
@@ -220,6 +219,9 @@ public class TaskGUI extends JFrame {
             Task temp = new Task(name, notes, dueDate);
             controller.addTask(temp);
             controller.save();
+            if (noTasks != null) {
+                noTasks.setVisible(false);
+            }
             initTaskPanel(temp, allTasksPane, controller.getSize() - 1, true);
             allTasksPane.revalidate();
             allTasksPane.repaint();

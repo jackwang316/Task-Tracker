@@ -25,6 +25,7 @@ import java.util.*;
 
 public class TaskController {
     public ArrayList<Task> tasks;
+    private final static String command = "curl -X GET https://www.boredapi.com/api/activity";
 
     public TaskController() {
         tasks = new ArrayList<>();
