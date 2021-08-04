@@ -57,9 +57,8 @@ public class Task implements Comparable<Task> {
 
     @Override
     public String toString() {
-        String result = "Task: " + this.getName() + "\n" + "Notes: " + getNotes() + "\n"
+        return "Task: " + this.getName() + "\n" + "Notes: " + getNotes() + "\n"
                 + "Due date: " + getDateFormatted();
-        return result;
     }
 
     @Override

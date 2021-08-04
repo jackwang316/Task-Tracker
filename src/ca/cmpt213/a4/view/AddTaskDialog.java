@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.GregorianCalendar;
 
+import static ca.cmpt213.a4.control.TaskController.generateTaskInfo;
+
 public class AddTaskDialog extends JDialog {
     private static final int DIALOG_WIDTH = 400;
     private static final int DIALOG_HEIGHT = 300;
@@ -95,7 +97,10 @@ public class AddTaskDialog extends JDialog {
 
     private void initGenerateButton(JButton generate) {
         generate.addActionListener(e -> {
-
+            String generated = generateTaskInfo();
+            String[] components = generated.split("-");
+            nameInput.setText(components[0]);
+            notesInput.setText(components[1]);
         });
     }
 
