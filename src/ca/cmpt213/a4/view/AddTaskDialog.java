@@ -10,8 +10,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.GregorianCalendar;
 
-import static ca.cmpt213.a4.control.TaskController.generateTaskInfo;
+import static ca.cmpt213.a4.control.TaskGenerator.generateTaskInfo;
 
+/**
+ * AddTaskDialog is the popup window shown when the user clicks the add task button
+ * in the main screen of the program. The class stores UI components where input can be retrieved from and supports
+ * features such as initializing the layout and buttons, adding button functionality, and providing methods to retrieve
+ * input from textfields.
+ */
 public class AddTaskDialog extends JDialog {
     private static final int DIALOG_WIDTH = 400;
     private static final int DIALOG_HEIGHT = 300;

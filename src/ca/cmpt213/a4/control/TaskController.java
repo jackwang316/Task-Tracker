@@ -2,11 +2,13 @@ package ca.cmpt213.a4.control;
 
 import ca.cmpt213.a4.model.Task;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,17 +16,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * TaskManager provides the functionality listed in the options.
- * The object stores input prompts and an arraylist of tasks to manage.
- * Features include loading tasks from csv file, selecting the correct option
- * based on input, printing all tasks in list, adding/deleting task to list, marking
- * a task as complete, list upcoming/overdue tasks, saving to csv and exiting.
- * Note the main method is also in this class.
+ * TaskController takes in input from TaskGUI and updates information of tasks accordingly.
+ * The object stores an arraylist of tasks to manage. Features include loading tasks from csv file, sorting tasks by date
+ * returning overdue, upcoming or all tasks, adding/deleting task to list, marking
+ * a task as complete, and saving to csv and exiting.
  */
 
 public class TaskController {
     public ArrayList<Task> tasks;
-    private final static String COMMAND = "curl -X GET https://www.boredapi.com/api/activity";
 
     public TaskController() {
         tasks = new ArrayList<>();
@@ -89,32 +88,6 @@ public class TaskController {
         if (location != -1) {
             tasks.get(location).setComplete(isComplete);
         }
-    }
-
-    public static String generateTaskInfo() {
-        String toParse = request();
-        JsonObject object = new Gson().fromJson(toParse, JsonObject.class);
-        return object.get("activity").getAsString()
-                + "-" + "type: " + object.get("type").getAsString() + ", "
-                + "participants: " + object.get("participants").getAsString() + ", "
-                + "price: " + object.get("price").getAsString();
-    }
-
-    private static String request() {
-        String result = null;
-        Process process = null;
-        try {
-            process = Runtime.getRuntime().exec(COMMAND);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        InputStream stream = process.getInputStream();
-        try {
-            result = new String(stream.readAllBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
     }
 
     private void sortByDate() {

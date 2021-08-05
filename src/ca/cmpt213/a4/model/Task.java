@@ -7,7 +7,7 @@ import java.util.GregorianCalendar;
 /**
  * Task models the information about a task that has or needs to be completed.
  * A task includes its name, notes regarding the task, the due date, and
- * whether or not the task has been completed. Features include retrieving the
+ * if the task has been completed. Features include retrieving the
  * attributes of the project, formatting the date to a proper string format and
  * formatting the entire object into one string.
  */
