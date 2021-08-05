@@ -9,7 +9,8 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-/**TaskGUI displays task information onto the UI and provides multiple operations
+/**
+ * TaskGUI displays task information onto the UI and provides multiple operations
  * to the user to change tasks and their information. The class stores a TaskController and
  * several important UI components. Operations include updating UI upon task deletion/addition,
  * initializing the different views and switching between them, initializing UI layouts and button functionalities.
